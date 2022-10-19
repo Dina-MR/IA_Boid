@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 1309656291371033105}
   - component: {fileID: -8975393353922799216}
   - component: {fileID: 2892670516316251334}
-  - component: {fileID: -2794651343859740688}
+  - component: {fileID: 255633370563324433}
   m_Layer: 0
   m_Name: Boid_Leaf
   m_TagString: Boid
@@ -111,11 +111,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b3a4eec65c606a64296213469fc883e8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  attractDistance: 6
   alignDistance: 4
   repulseDistance: 2
-  speedMin: 3
-  speedMax: 15
---- !u!54 &-2794651343859740688
+  defaultSpeed: 0
+  speed: 0
+--- !u!54 &255633370563324433
 Rigidbody:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -127,7 +128,7 @@ Rigidbody:
   m_Drag: 0
   m_AngularDrag: 0.05
   m_UseGravity: 0
-  m_IsKinematic: 0
+  m_IsKinematic: 1
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
