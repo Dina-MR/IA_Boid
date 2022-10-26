@@ -5,7 +5,10 @@ using UnityEngine;
 public class Boid : MonoBehaviour
 {
     // Distances permettant d'établir la zone dans laquelle se trouve un voisin
-    public float attractDistance, alignDistance, repulseDistance; 
+    public float attractDistance, alignDistance, repulseDistance;
+    // Etat du boid
+    public bool canBeAttracted = true;
+    public bool canBeRepulsed = true;
 
     /*
      * Paramètres relatifs au mouvement individuel du boïd
@@ -17,6 +20,11 @@ public class Boid : MonoBehaviour
     // Limites
     float axisX = 0.05f;
     float axisZ = 0.05f;
+    // Positions extrêmes, récupérées à partir du parent
+    public Vector3 minimumPosition;
+    public Vector3 maximumPosition;
+    // Translation, pour les demi-tours
+    Vector3 translation = Vector3.forward;
 
     // Accès au contrôleur
     //public BoidsGenerator boidGenerator;
@@ -56,8 +64,21 @@ public class Boid : MonoBehaviour
 
         // Translation
         //transform.position = new Vector3(x, 0, z);
-        //transform.Translate(new Vector3(x, 0, z)); 
-        transform.Translate(Vector3.forward * step);
+        //transform.Translate(new Vector3(x, 0, z));
+        // Demi-tour lorsque le boid atteint les limites du terrain
+        if(transform.position.z <= minimumPosition.z)
+        {
+            //transform.RotateAround(transform.position, Vector3.forward, step);
+            translation = Vector3.forward;
+            transform.Rotate(new Vector3(0, 10, 0) * Time.deltaTime);
+        }
+        if(transform.position.z >= maximumPosition.z)
+        {
+            //transform.RotateAround(transform.position, Vector3.back, step);
+            translation = Vector3.back;
+            transform.Rotate(new Vector3(0, 10, 0) * Time.deltaTime);
+        }
+        transform.Translate(translation * step);
     }
 
     /*
@@ -130,7 +151,8 @@ public class Boid : MonoBehaviour
                 //newDistance = positionDifference;
             }
             positionDifference /= neighboursCount;
-            transform.Translate(positionDifference);
+            //positionDifference = -positionDifference.normalized;
+            transform.Translate(new Vector3(positionDifference.x, 0, positionDifference.z) * 2f);
         }
     }
 
@@ -184,23 +206,26 @@ public class Boid : MonoBehaviour
         {
             float distanceWithNeighbour = distance(neighbour.transform);
             // Vérification de la distance, afin de déterminer le comportement à avoir
-            if (distanceWithNeighbour <= repulseDistance)
+            if (distanceWithNeighbour <= repulseDistance && canBeRepulsed)
             {
                 Debug.Log("Répulsion !");
                 repulseList.Add(neighbour);
+                //canBeRepulsed = false;
+                canBeAttracted = true;
             }
             if (distanceWithNeighbour <= alignDistance)
             {
                 Debug.Log("Alignons-nous !");
                 alignList.Add(neighbour);
                 //moveWith(neighbour);
+                canBeRepulsed = true;
+                //canBeAttracted = false;
             }
         }
 
         //Mise à jour des mouvements
         moveCloserAll(attractList); // attraction
         moveWithAll(alignList, 1000); // alignement
-        moveAwayFromAll(repulseList, 1000);
-
+        moveAwayFromAll(repulseList, 1000); // répulsion
     }
 }

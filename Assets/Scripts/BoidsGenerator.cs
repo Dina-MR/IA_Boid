@@ -39,6 +39,10 @@ public class BoidsGenerator : MonoBehaviour
         // Vérification des distances
         foreach(GameObject boid in boids)
         {
+            // On passe au boid suivant si celui-ci ne peut être attiré
+            if (!boid.GetComponent<Boid>().canBeAttracted)
+                continue;
+
             List<GameObject> closestBoids = new List<GameObject>();
             foreach (GameObject otherBoid in boids)
             {
@@ -67,6 +71,8 @@ public class BoidsGenerator : MonoBehaviour
             // Paramétrage
             boid.name = "Boid n°" + (i + 1);
             boid.GetComponent<Boid>().defaultSpeed = Random.Range(speedMin, speedMax);
+            boid.GetComponent<Boid>().minimumPosition = minimumPosition;
+            boid.GetComponent<Boid>().maximumPosition = maximumPosition;
             //boid.GetComponent<Boid>().boidGenerator = this;
             boids.Add(boid);
         }
