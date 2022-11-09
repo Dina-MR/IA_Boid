@@ -14,6 +14,8 @@ GameObject:
   - component: {fileID: -8975393353922799216}
   - component: {fileID: 2892670516316251334}
   - component: {fileID: 255633370563324433}
+  - component: {fileID: 1847774526070447922}
+  - component: {fileID: 6165689891835801759}
   m_Layer: 0
   m_Name: Boid_Leaf
   m_TagString: Boid
@@ -114,8 +116,13 @@ MonoBehaviour:
   attractDistance: 6
   alignDistance: 4
   repulseDistance: 2
+  canBeAttracted: 1
+  canBeRepulsed: 1
+  immuneToOthers: 0
   defaultSpeed: 0
   speed: 0
+  minimumPosition: {x: 0, y: 0, z: 0}
+  maximumPosition: {x: 0, y: 0, z: 0}
 --- !u!54 &255633370563324433
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -132,3 +139,29 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!64 &1847774526070447922
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1332470996692967663}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 4300000, guid: 0a2b60bf1f57eba4d8ad3bd4ce5d40d2, type: 3}
+--- !u!114 &6165689891835801759
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1332470996692967663}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dcb9b8c5c83a37d479dccc0b691ee71d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

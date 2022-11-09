@@ -39,14 +39,14 @@ public class BoidsGenerator : MonoBehaviour
         // Vérification des distances
         foreach(GameObject boid in boids)
         {
-            // On passe au boid suivant si celui-ci ne peut être attiré
-            if (!boid.GetComponent<Boid>().canBeAttracted)
+            // On passe au boid suivant si celui-ci ne peut être affecté par les autres boids
+            if (!boid.GetComponent<Boid>().canBeAttracted || boid.GetComponent<Boid>().immuneToOthers)
                 continue;
 
             List<GameObject> closestBoids = new List<GameObject>();
             foreach (GameObject otherBoid in boids)
             {
-                if (otherBoid == boid)
+                if (otherBoid == boid || otherBoid.GetComponent<Boid>().immuneToOthers)
                     continue;
 
                 float singleDistance = boid.GetComponent<Boid>().distance(otherBoid.transform);

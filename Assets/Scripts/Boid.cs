@@ -6,9 +6,10 @@ public class Boid : MonoBehaviour
 {
     // Distances permettant d'établir la zone dans laquelle se trouve un voisin
     public float attractDistance, alignDistance, repulseDistance;
-    // Etat du boid
+    // Etat du boid, vis-à-vis des autres boids
     public bool canBeAttracted = true;
     public bool canBeRepulsed = true;
+    public bool immuneToOthers = false; // le boid ne suit cherche plus à suivre les autres s'il est collé à un arbre
 
     /*
      * Paramètres relatifs au mouvement individuel du boïd
@@ -32,12 +33,6 @@ public class Boid : MonoBehaviour
     // Suivi ou non du joueur
     bool isFollowingPlayer = false;
 
-    /*
-     * Positions extrêmes, pour le mouvement
-     */
-
-    // Etat du boid
-
     // Start is called before the first frame update
     void Start()
     {
@@ -49,7 +44,8 @@ public class Boid : MonoBehaviour
     void Update()
     {
         //detectDistances(boidGenerator);
-        move();
+        if(!immuneToOthers)
+            move();
     }
 
     // Mouvement circulaire du boïd
@@ -151,7 +147,7 @@ public class Boid : MonoBehaviour
                 //newDistance = positionDifference;
             }
             positionDifference /= neighboursCount;
-            //positionDifference = -positionDifference.normalized;
+            positionDifference = -positionDifference.normalized;
             transform.Translate(new Vector3(positionDifference.x, 0, positionDifference.z) * 2f);
         }
     }
@@ -160,21 +156,6 @@ public class Boid : MonoBehaviour
     public float distance(Transform other)
     {
         return Vector3.Distance(transform.position, other.position);
-    }
-
-    /*
-     * 1ERE VERSION - AVEC COLLIDER
-     */
-
-    // Collision entre ce boid et le joueur
-    private void OnTriggerEnter(Collider other)
-    {
-        //Collision avec le joueur
-        if (other.gameObject.CompareTag("Player"))
-        {
-            Debug.Log("Coucou joueur ! Je suis le boïd n° " + name);
-            moveCloser(other.gameObject);
-        }
     }
 
     /*
@@ -192,7 +173,7 @@ public class Boid : MonoBehaviour
     //    }
     //}
 
-    // Adaptation du mouvement selon la distance
+    // Adaptation du mouvement selon la distance avec 
     public void adaptMovement(ref List<GameObject> neighbours)
     {
         Debug.Log("Nombre de voisins " + neighbours.Count);
